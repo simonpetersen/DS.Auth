@@ -13,5 +13,6 @@ public class ServerMain {
 
         PrintServer server = new PrintServer();
         Naming.rebind(Strings.ServerURL, server);
+        System.out.println("Print Server is now running.");
     }
 }

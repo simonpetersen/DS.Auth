@@ -11,12 +11,14 @@ public class PrintService {
     private Map<String, String> config;
     private Timer timer;
     private int jobNumber;
+    private boolean authenticated;
 
     public PrintService() {
         printJobs = new ArrayList<>();
         config = new HashMap<>();
         timer = new Timer();
         jobNumber = 1;
+        authenticated = false;
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -27,7 +29,12 @@ public class PrintService {
     }
 
     public void addPrintJob(String filename, String printer) {
+        if (!authenticated) {
+            return;
+        }
+
         printJobs.add(new PrintJob(jobNumber++, filename, printer));
+        authenticated = false;
     }
 
     public List<String> getPrintQueue() {
@@ -41,6 +48,15 @@ public class PrintService {
         return String.format(Strings.ConfigNotFoundMsg, parameter);
     }
 
+    public void moveJobToTopOfQueue(int jobId) {
+        Optional<PrintJob> jobOptional = printJobs.stream().filter(p -> p.getJobNumber() == jobId).findFirst();
+        if (jobOptional.isPresent()) {
+            PrintJob job = jobOptional.get();
+            printJobs.remove(job);
+            printJobs.add(0, job);
+        }
+    }
+
     public void setConfig(String parameter, String value) {
         config.put(parameter, value);
     }
@@ -52,5 +68,10 @@ public class PrintService {
             System.out.println(String.format("%s: %s printed on %s", date, job.getFilename(), job.getPrinter()));
             printJobs.remove(0);
         }
+    }
+
+    public String authenticate(String username, String password) {
+        authenticated = true;
+        return "Authentication successfull.";
     }
 }

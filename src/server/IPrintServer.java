@@ -13,4 +13,5 @@ public interface IPrintServer extends java.rmi.Remote {
     String status() throws RemoteException;  // prints status of printer on the user's display
     String readConfig(String parameter) throws RemoteException;   // prints the value of the parameter on the user's display
     void setConfig(String parameter, String value) throws RemoteException;   // sets the parameter to value
+    String authenticate(String username, String password) throws RemoteException;
 }

@@ -25,7 +25,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public void topQueue(int job) {
-
+        printService.moveJobToTopOfQueue(job);
     }
 
     @Override
@@ -56,5 +56,10 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
     @Override
     public void setConfig(String parameter, String value) {
         printService.setConfig(parameter, value);
+    }
+
+    @Override
+    public String authenticate(String username, String password) throws RemoteException {
+        return printService.authenticate(username, password);
     }
 }
