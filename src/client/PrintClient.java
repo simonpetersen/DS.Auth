@@ -16,8 +16,8 @@ public class PrintClient {
         server = (IPrintServer) Naming.lookup(Strings.ServerURL);
     }
 
-    public void addPrintJob() throws RemoteException {
-        server.print("Test1", "Printer1");
+    public void addPrintJob(String filename, String printer) throws RemoteException {
+        server.print(filename, printer);
     }
 
     public void printQueue() throws RemoteException {

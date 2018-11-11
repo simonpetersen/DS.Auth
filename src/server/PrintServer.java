@@ -2,35 +2,25 @@ package server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
-    private List<String> printers;
-    private List<String> prints;
+    private PrintService printService;
 
     public PrintServer() throws RemoteException {
         super();
-        printers = new ArrayList<>();
-        prints = new ArrayList<>();
+        printService = new PrintService();
     }
 
     @Override
     public void print(String filename, String printer) {
-        printers.add(printer);
-        prints.add(filename);
+        printService.addPrintJob(filename, printer);
     }
 
     @Override
     public List<String> queue() {
-        List<String> queue = new ArrayList<>();
-        for (int i = 0; i < prints.size(); i++) {
-            String s = String.format("%s %s", i, prints.get(i));
-            queue.add(s);
-        }
-
-        return queue;
+        return printService.getPrintQueue();
     }
 
     @Override
@@ -60,11 +50,11 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public String readConfig(String parameter) {
-        return null;
+        return printService.readConfig(parameter);
     }
 
     @Override
-    public String setConfig(String parameter, String value) {
-        return null;
+    public void setConfig(String parameter, String value) {
+        printService.setConfig(parameter, value);
     }
 }
