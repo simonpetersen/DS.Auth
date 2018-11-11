@@ -12,8 +12,8 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     public PrintServer() throws RemoteException {
         super();
-        printers = new ArrayList<>();
-        prints = new ArrayList<>();
+        printers = new ArrayList<String>();
+        prints = new ArrayList<String>();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public List<String> queue() {
-        List<String> queue = new ArrayList<>();
+        List<String> queue = new ArrayList<String>();
         for (int i = 0; i < prints.size(); i++) {
             String s = String.format("%s %s", i, prints.get(i));
             queue.add(s);
