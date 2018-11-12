@@ -8,11 +8,9 @@ import java.io.IOException;
 
 public class AuthenticationService {
 
-    private static String credentialsPath = Strings.credentials;
-
     public static boolean Validate(String user, String pass){
         try {
-            BufferedReader br = new BufferedReader(new FileReader(credentialsPath));
+            BufferedReader br = new BufferedReader(new FileReader(Strings.Credentials));
             for(String line; (line = br.readLine()) != null; ){
                 String[] credentials = line.split(";");
                 if (credentials[0].trim().equals(user.trim()) && credentials[1].trim().equals(pass.trim())) {

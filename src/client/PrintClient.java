@@ -17,10 +17,10 @@ public class PrintClient {
     }
 
     public void addPrintJob(String filename, String printer) throws RemoteException {
-        server.print(filename, printer);
+        server.print(filename, printer, "", "");
     }
 
     public void printQueue() throws RemoteException {
-        System.out.println(server.queue());
+        System.out.println(server.queue("", ""));
     }
 }

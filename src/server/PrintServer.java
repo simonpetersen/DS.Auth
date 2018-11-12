@@ -1,5 +1,7 @@
 package server;
 
+import util.Strings;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -7,64 +9,94 @@ import java.util.List;
 
 public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
-    private List<String> printers;
-    private List<String> prints;
+    private PrintService printService;
 
     public PrintServer() throws RemoteException {
         super();
-        printers = new ArrayList<String>();
-        prints = new ArrayList<String>();
+        printService = new PrintService();
     }
 
     @Override
-    public void print(String filename, String printer) {
-        printers.add(printer);
-        prints.add(filename);
-    }
-
-    @Override
-    public List<String> queue() {
-        List<String> queue = new ArrayList<String>();
-        for (int i = 0; i < prints.size(); i++) {
-            String s = String.format("%s %s", i, prints.get(i));
-            queue.add(s);
+    public String print(String filename, String printer, String username, String password) {
+        if (!AuthenticationService.Validate(username, password)) {
+            return Strings.UserNotAuthorized;
         }
 
-        return queue;
+        return printService.addPrintJob(filename, printer);
     }
 
     @Override
-    public void topQueue(int job) {
+    public List<String> queue(String username, String password) {
+        if (!AuthenticationService.Validate(username, password)) {
+            List<String> result = new ArrayList<>();
+            result.add(Strings.UserNotAuthorized);
+            return result;
+        }
 
+        return printService.getPrintQueue();
     }
 
     @Override
-    public String start() {
+    public String topQueue(int job, String username, String password) {
+        if (!AuthenticationService.Validate(username, password)) {
+            return Strings.UserNotAuthorized;
+        }
+
+        return printService.moveJobToTopOfQueue(job);
+    }
+
+    @Override
+    public String start(String username, String password) {
+        if (!AuthenticationService.Validate(username, password)) {
+            return Strings.UserNotAuthorized;
+        }
+
+        return printService.startPrinter();
+    }
+
+    @Override
+    public String stop(String username, String password) {
+        if (!AuthenticationService.Validate(username, password)) {
+            return Strings.UserNotAuthorized;
+        }
+
+        return printService.stop();
+    }
+
+    @Override
+    public String restart(String username, String password) {
+        if (!AuthenticationService.Validate(username, password)) {
+            return Strings.UserNotAuthorized;
+        }
+
+        return printService.restart();
+    }
+
+    // TODO: Implement
+    @Override
+    public String status(String username, String password) {
+        if (!AuthenticationService.Validate(username, password)) {
+            return Strings.UserNotAuthorized;
+        }
+
         return null;
     }
 
     @Override
-    public String stop() {
-        return null;
+    public String readConfig(String parameter, String username, String password) {
+        if (!AuthenticationService.Validate(username, password)) {
+            return Strings.UserNotAuthorized;
+        }
+
+        return printService.readConfig(parameter);
     }
 
     @Override
-    public String restart() {
-        return null;
-    }
+    public String setConfig(String parameter, String value, String username, String password) {
+        if (!AuthenticationService.Validate(username, password)) {
+            return Strings.UserNotAuthorized;
+        }
 
-    @Override
-    public String status() {
-        return null;
-    }
-
-    @Override
-    public String readConfig(String parameter) {
-        return null;
-    }
-
-    @Override
-    public String setConfig(String parameter, String value) {
-        return null;
+        return printService.setConfig(parameter, value);
     }
 }

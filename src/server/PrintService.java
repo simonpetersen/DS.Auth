@@ -9,32 +9,20 @@ public class PrintService {
 
     List<PrintJob> printJobs;
     private Map<String, String> config;
-    private Timer timer;
+    private Timer printTimer;
     private int jobNumber;
-    private boolean authenticated;
 
     public PrintService() {
         printJobs = new ArrayList<>();
         config = new HashMap<>();
-        timer = new Timer();
+        printTimer = new Timer();
         jobNumber = 1;
-        authenticated = false;
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                printJob();
-            }
-        };
-        timer.schedule(timerTask, 0, 20*1000);
+        startPrinter();
     }
 
-    public void addPrintJob(String filename, String printer) {
-        if (!authenticated) {
-            return;
-        }
-
+    public String addPrintJob(String filename, String printer) {
         printJobs.add(new PrintJob(jobNumber++, filename, printer));
-        authenticated = false;
+        return null;
     }
 
     public List<String> getPrintQueue() {
@@ -48,17 +36,44 @@ public class PrintService {
         return String.format(Strings.ConfigNotFoundMsg, parameter);
     }
 
-    public void moveJobToTopOfQueue(int jobId) {
+    public String moveJobToTopOfQueue(int jobId) {
         Optional<PrintJob> jobOptional = printJobs.stream().filter(p -> p.getJobNumber() == jobId).findFirst();
         if (jobOptional.isPresent()) {
             PrintJob job = jobOptional.get();
             printJobs.remove(job);
             printJobs.add(0, job);
+            return Strings.JobMovedToTopOk;
         }
+
+        return Strings.JobNotFound;
     }
 
-    public void setConfig(String parameter, String value) {
+    public String setConfig(String parameter, String value) {
         config.put(parameter, value);
+        return Strings.ConfigSetOk;
+    }
+
+    public String startPrinter() {
+        TimerTask printerTask = new TimerTask() {
+            @Override
+            public void run() {
+                printJob();
+            }
+        };
+        printTimer.schedule(printerTask, 0, 20*1000);
+        return Strings.PrinterStarted;
+    }
+
+    public String stop() {
+        printTimer.cancel();
+        return Strings.PrinterStopped;
+    }
+
+    public String restart() {
+        String msg = stop();
+        printJobs = new ArrayList<PrintJob>();
+        msg += "\n" + startPrinter();
+        return msg;
     }
 
     private void printJob() {
@@ -68,10 +83,5 @@ public class PrintService {
             System.out.println(String.format("%s: %s printed on %s", date, job.getFilename(), job.getPrinter()));
             printJobs.remove(0);
         }
-    }
-
-    public String authenticate(String username, String password) {
-        authenticated = true;
-        return "Authentication successfull.";
     }
 }
