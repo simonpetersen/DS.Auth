@@ -1,5 +1,6 @@
 package server;
 
+import util.PrinterStatus;
 import util.Strings;
 
 import java.util.*;
@@ -11,6 +12,7 @@ public class PrintService {
     private Map<String, String> config;
     private Timer printTimer;
     private int jobNumber;
+    private PrinterStatus status;
 
     public PrintService() {
         printJobs = new ArrayList<>();
@@ -61,11 +63,13 @@ public class PrintService {
             }
         };
         printTimer.schedule(printerTask, 0, 20*1000);
+        status = PrinterStatus.Running;
         return Strings.PrinterStarted;
     }
 
     public String stop() {
         printTimer.cancel();
+        status = PrinterStatus.Stopped;
         return Strings.PrinterStopped;
     }
 
@@ -74,6 +78,10 @@ public class PrintService {
         printJobs = new ArrayList<PrintJob>();
         msg += "\n" + startPrinter();
         return msg;
+    }
+
+    public String status() {
+        return status.toString();
     }
 
     private void printJob() {

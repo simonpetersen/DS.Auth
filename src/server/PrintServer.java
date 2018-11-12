@@ -72,14 +72,13 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
         return printService.restart();
     }
 
-    // TODO: Implement
     @Override
     public String status(String username, String password) {
         if (!AuthenticationService.Validate(username, password)) {
             return Strings.UserNotAuthorized;
         }
 
-        return null;
+        return printService.status();
     }
 
     @Override
