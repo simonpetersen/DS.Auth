@@ -3,6 +3,7 @@ package util;
 public class Strings {
     public static String ServerURL = "rmi://localhost/printserver";
     public static String Credentials = "src/util/Credentials.txt";
+    public static String logLocation = "src/serverlog.log";
     public static String ConfigNotFoundMsg = "Configuration %s not found.";
     public static String ConfigSetOk = "Configuration has been set.";
     public static String UserNotAuthorized = "Authentication failed.";
