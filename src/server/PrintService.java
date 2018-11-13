@@ -17,7 +17,6 @@ public class PrintService {
     public PrintService() {
         printJobs = new ArrayList<>();
         config = new HashMap<>();
-        printTimer = new Timer();
         jobNumber = 1;
         startPrinter();
     }
@@ -56,6 +55,7 @@ public class PrintService {
     }
 
     public String startPrinter() {
+        printTimer = new Timer();
         TimerTask printerTask = new TimerTask() {
             @Override
             public void run() {
