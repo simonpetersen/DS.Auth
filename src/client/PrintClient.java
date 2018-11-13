@@ -1,6 +1,5 @@
 package client;
 
-import server.AuthenticationService;
 import server.IPrintServer;
 import util.Strings;
 

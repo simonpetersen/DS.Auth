@@ -2,22 +2,12 @@ package server;
 
 public class PrintJob {
 
-    private int jobNumber;
     private String filename;
     private String printer;
 
-    public PrintJob(int jobNumber, String filename, String printer) {
-        this.jobNumber = jobNumber;
+    public PrintJob(String filename, String printer) {
         this.filename = filename;
         this.printer = printer;
-    }
-
-    public int getJobNumber() {
-        return jobNumber;
-    }
-
-    public void setJobNumber(int jobNumber) {
-        this.jobNumber = jobNumber;
     }
 
     public String getFilename() {
@@ -35,6 +25,4 @@ public class PrintJob {
     public void setPrinter(String printer) {
         this.printer = printer;
     }
-
-    public String toString() { return getJobNumber() + " " + getFilename(); }
 }

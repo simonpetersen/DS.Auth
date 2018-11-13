@@ -9,28 +9,32 @@ import java.util.stream.Collectors;
 
 public class PrintService {
 
-    List<PrintJob> printJobs;
+    private List<PrintJob> printJobs;
     private Map<String, String> config;
     private Timer printTimer;
-    private int jobNumber;
     private PrinterStatus status;
     Logger logger;
 
     public PrintService(Logger logger) {
         printJobs = new ArrayList<>();
         config = new HashMap<>();
-        jobNumber = 1;
         this.logger = logger;
         startPrinter();
     }
 
     public String addPrintJob(String filename, String printer) {
-        printJobs.add(new PrintJob(jobNumber++, filename, printer));
-        return null;
+        printJobs.add(new PrintJob(filename, printer));
+        return Strings.JobAdded;
     }
 
     public List<String> getPrintQueue() {
-        return printJobs.stream().map(p -> p.toString()).collect(Collectors.toList());
+        List<String> jobs = printJobs.stream()
+                .map(p -> printJobs.indexOf(p)+1 + "\t\t" + p.getFilename())
+                .collect(Collectors.toList());
+
+        jobs.add(0, "Number\tFilename");
+
+        return jobs;
     }
 
     public String readConfig(String parameter) {
@@ -40,10 +44,9 @@ public class PrintService {
         return String.format(Strings.ConfigNotFoundMsg, parameter);
     }
 
-    public String moveJobToTopOfQueue(int jobId) {
-        Optional<PrintJob> jobOptional = printJobs.stream().filter(p -> p.getJobNumber() == jobId).findFirst();
-        if (jobOptional.isPresent()) {
-            PrintJob job = jobOptional.get();
+    public String moveJobToTopOfQueue(int jobNumber) {
+        if (printJobs.size() >= jobNumber) {
+            PrintJob job = printJobs.get(jobNumber-1);
             printJobs.remove(job);
             printJobs.add(0, job);
             return Strings.JobMovedToTopOk;
@@ -91,7 +94,6 @@ public class PrintService {
         if (!printJobs.isEmpty()) {
             PrintJob job = printJobs.get(0);
             Date date = new Date();
-            //System.out.println(String.format("%s: %s printed on %s", date, job.getFilename(), job.getPrinter()));
             logger.info(String.format("%s: %s printed on printer: %s", date, job.getFilename(), job.getPrinter()));
             printJobs.remove(0);
         }
