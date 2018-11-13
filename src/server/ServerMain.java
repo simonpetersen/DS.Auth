@@ -24,7 +24,7 @@ public class ServerMain {
 
     public static void startLogging() throws IOException{
         logger = Logger.getLogger(PrintServer.class.getName());
-        fileHandler = new FileHandler(Strings.logLocation);
+        fileHandler = new FileHandler(Strings.logLocation, true);
         simpleFormatter = new SimpleFormatter();
         logger.addHandler(fileHandler);
         fileHandler.setFormatter(simpleFormatter);
