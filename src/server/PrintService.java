@@ -4,6 +4,7 @@ import util.PrinterStatus;
 import util.Strings;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class PrintService {
@@ -13,11 +14,13 @@ public class PrintService {
     private Timer printTimer;
     private int jobNumber;
     private PrinterStatus status;
+    Logger logger;
 
-    public PrintService() {
+    public PrintService(Logger logger) {
         printJobs = new ArrayList<>();
         config = new HashMap<>();
         jobNumber = 1;
+        this.logger = logger;
         startPrinter();
     }
 
@@ -88,7 +91,8 @@ public class PrintService {
         if (!printJobs.isEmpty()) {
             PrintJob job = printJobs.get(0);
             Date date = new Date();
-            System.out.println(String.format("%s: %s printed on %s", date, job.getFilename(), job.getPrinter()));
+            //System.out.println(String.format("%s: %s printed on %s", date, job.getFilename(), job.getPrinter()));
+            logger.info(String.format("%s: %s printed on printer: %s", date, job.getFilename(), job.getPrinter()));
             printJobs.remove(0);
         }
     }

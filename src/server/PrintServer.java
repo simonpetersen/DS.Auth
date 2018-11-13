@@ -12,18 +12,12 @@ import java.util.logging.*;
 public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     private PrintService printService;
-    private Logger logger;
+    Logger logger;
 
-    public PrintServer() throws RemoteException, IOException {
+    public PrintServer(Logger log) throws RemoteException, IOException {
         super();
-        printService = new PrintService();
-        logger = Logger.getLogger(PrintServer.class.getName());
-        Handler fileHandler = new FileHandler(Strings.logLocation);
-        Formatter simpleFormatter = new SimpleFormatter();
-        logger.addHandler(fileHandler);
-        fileHandler.setFormatter(simpleFormatter);
-        fileHandler.setLevel(Level.ALL);
-        logger.setLevel(Level.ALL);
+        this.logger = log;
+        printService = new PrintService(logger);
     }
 
     @Override
