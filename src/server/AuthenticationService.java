@@ -12,6 +12,8 @@ public class AuthenticationService {
 
     public static boolean Validate(String user, String pass){
         try {
+            if(user == null || pass == null)
+                return false;
             BufferedReader br = new BufferedReader(new FileReader(Strings.Credentials));
             for(String line; (line = br.readLine()) != null; ){
                 String[] credentials = line.split(";");

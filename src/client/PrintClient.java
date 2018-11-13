@@ -12,24 +12,48 @@ import java.util.List;
 public class PrintClient {
 
     private IPrintServer server;
-    private String username, password;
+    private  static String username, password;
 
-    public void initRemoteConnection() throws RemoteException, NotBoundException, MalformedURLException {
+    public void initRemoteConnection(String username, String password) throws RemoteException, NotBoundException, MalformedURLException {
         server = (IPrintServer) Naming.lookup(Strings.ServerURL);
-        username = "simon";
-        password = "abcd";
+        this.username = username;
+        this.password = password;
     }
 
     public void addPrintJob(String filename, String printer) throws RemoteException {
-        server.print(filename, printer, "", "");
+        server.print(filename, printer, this.username, this.password);
     }
 
     public void printQueue() throws RemoteException {
-        print(server.queue(username, password));
+        print(server.queue(this.username, this.password));
     }
 
     public void getStatus() throws RemoteException {
-        print(server.status(username, password));
+        print(server.status(this.username, this.password));
+    }
+
+    public void topQueue(int job) throws RemoteException{
+        print(server.topQueue(job, this.username, this.password));
+    }
+
+    public void start() throws RemoteException{
+        print(server.start(this.username, this.password));
+    }
+
+    public void stop() throws RemoteException{
+        print(server.stop(this.username, this.password));
+    }
+
+    public void restart() throws RemoteException {
+        print(server.restart(this.username, this.password));
+    }
+
+    public void readConfig(String parameter) throws RemoteException {
+        print(server.readConfig(parameter, this.username, this.password));
+    }
+
+    public void setConfig(String parameter, String value) throws RemoteException {
+        print(server.setConfig(parameter, value, this.username, this.password));
     }
 
     public void print(String s) {
