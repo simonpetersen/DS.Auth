@@ -9,7 +9,6 @@ public class Hasher {
 
     public static String hash(String value, String salt) throws NoSuchAlgorithmException {
         byte[] saltBytes = hexStringToByteArray(salt);
-        String hashedPassword = null;
 
         //append saltvalue to value bytearray
         byte[] valueByte = value.getBytes(StandardCharsets.UTF_8);
@@ -22,8 +21,7 @@ public class Hasher {
         byte[] encodedhash = digest.digest(saltetValue);
 
         //Converts hashed password to hex-format for comparison purposes
-        hashedPassword = bytesToString(encodedhash);
-        return hashedPassword;
+        return bytesToString(encodedhash);
 
     }
 
@@ -37,7 +35,7 @@ public class Hasher {
     }
 
     //Converts byte arrays to strings in hex-format
-    public static String bytesToString(byte[] bytes){
+    private static String bytesToString(byte[] bytes){
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < bytes.length; i++){
             sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
@@ -46,7 +44,7 @@ public class Hasher {
     }
 
     //Converts hex-format string to bytearrays
-    public static byte[] hexStringToByteArray(String hex) {
+    private static byte[] hexStringToByteArray(String hex) {
         int len = hex.length();
         byte[] output = new byte[len / 2];
         for (int i = 0; i < len; i += 2) {

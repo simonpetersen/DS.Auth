@@ -98,4 +98,9 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
         return printService.setConfig(parameter, value);
     }
+
+    @Override
+    public boolean authenticate(String username, String password) {
+        return AuthenticationService.Validate(username, password);
+    }
 }
