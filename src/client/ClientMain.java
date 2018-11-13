@@ -3,18 +3,12 @@ package client;
 import server.AuthenticationService;
 
 import java.rmi.RemoteException;
-import java.security.SecureRandom;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ClientMain {
     public static void main(String[] args) throws Exception {
         PrintClient client = new PrintClient();
-        //client.initRemoteConnection("simon", "1234");
-        //client.getStatus();
-        //client.addPrintJob("File1", "Printer-1");
-        //client.addPrintJob("File2", "Printer-2");
-        //client.printQueue();
+
         //Console program
         Scanner sc = new Scanner(System.in);
 
