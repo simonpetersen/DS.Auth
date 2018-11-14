@@ -27,7 +27,7 @@ public class PrintService {
         return Strings.JobAdded;
     }
 
-    // Returns the list of printjobs in the format <number>\t<filename>
+    // Returns the list of printjobs in the format <number>\t\t<filename>
     public List<String> getPrintQueue() {
         List<String> jobs = printJobs.stream()
                 .map(p -> printJobs.indexOf(p)+1 + "\t\t" + p.getFilename())
