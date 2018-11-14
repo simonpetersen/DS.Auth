@@ -15,6 +15,7 @@ public class PrintClient {
     private IPrintServer server;
     private String username, password;
 
+    // The main method of the program. Starts the console based UI and authenticates the user information.
     public void runClient() throws Exception {
         //Console program
         Scanner sc = new Scanner(System.in);

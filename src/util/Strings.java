@@ -1,5 +1,8 @@
 package util;
 
+/**
+ * Contains String value literals used in the application
+ */
 public class Strings {
     public static String ServerURL = "rmi://localhost/printserver";
     public static String Credentials = "src/util/Credentials.txt";

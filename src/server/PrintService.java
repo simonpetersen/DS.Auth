@@ -27,6 +27,7 @@ public class PrintService {
         return Strings.JobAdded;
     }
 
+    // Returns the list of printjobs in the format <number>\t<filename>
     public List<String> getPrintQueue() {
         List<String> jobs = printJobs.stream()
                 .map(p -> printJobs.indexOf(p)+1 + "\t\t" + p.getFilename())
@@ -44,6 +45,7 @@ public class PrintService {
         return String.format(Strings.ConfigNotFoundMsg, parameter);
     }
 
+    // Checks if the specified jobs is in the list, and if so moves it to the top of the queue
     public String moveJobToTopOfQueue(int jobNumber) {
         if (printJobs.size() >= jobNumber) {
             PrintJob job = printJobs.get(jobNumber-1);
@@ -60,6 +62,7 @@ public class PrintService {
         return Strings.ConfigSetOk;
     }
 
+    // Initializes the printTimer and adds the task that removes the top job from the queue and prints it
     public String startPrinter() {
         printTimer = new Timer();
         TimerTask printerTask = new TimerTask() {
@@ -90,6 +93,7 @@ public class PrintService {
         return status.toString();
     }
 
+    // Private method used in the printTimer.
     private void printJob() {
         if (!printJobs.isEmpty()) {
             PrintJob job = printJobs.get(0);

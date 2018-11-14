@@ -1,5 +1,8 @@
 package server;
 
+/**
+ * Basic model class representing a print job
+ */
 public class PrintJob {
 
     private String filename;
