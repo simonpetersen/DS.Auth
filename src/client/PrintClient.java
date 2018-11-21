@@ -39,7 +39,7 @@ public class PrintClient {
             print(msg);
         } while(role == Role.Unknown);
         // Authentication has been successful, user can call server.
-        List<Integer> allowedChoices = getAllowedChoicesForRole(role);
+        List<String> allowedChoices = getAllowedChoicesForRole(role);
         String input;
         do {
             presentMenu();
@@ -65,8 +65,8 @@ public class PrintClient {
         print("0: Exit");
     }
 
-    private boolean chooseMenu(String input, Scanner scanner, List<Integer> allowedChoices) throws RemoteException{
-        if (!allowedChoices.contains(Integer.parseInt(input))) {
+    private boolean chooseMenu(String input, Scanner scanner, List<String> allowedChoices) throws RemoteException{
+        if (!allowedChoices.contains(input)) {
             print("Invalid choice. Try again.");
             return true;
         }
@@ -175,13 +175,13 @@ public class PrintClient {
         list.stream().forEach(s -> System.out.println(s));
     }
 
-    private List<Integer> getAllowedChoicesForRole(Role role) {
+    private List<String> getAllowedChoicesForRole(Role role) {
         switch (role) {
-            case Admin: return Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-            case Technician: return Arrays.asList(0, 3, 4, 5, 6, 7, 8, 9);
-            case PowerUser: return Arrays.asList(0, 1, 2, 7);
-            case Employee: return Arrays.asList(0, 1, 2);
-            default: return Arrays.asList(0);
+            case Admin: return Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+            case Technician: return Arrays.asList("0", "3", "5", "6", "7", "8", "9");
+            case PowerUser: return Arrays.asList("0", "1", "2", "7");
+            case Employee: return Arrays.asList("0", "1", "2");
+            default: return Arrays.asList("0");
         }
     }
 }
