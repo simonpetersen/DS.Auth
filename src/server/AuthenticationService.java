@@ -8,11 +8,11 @@ import java.io.FileReader;
 
 public class AuthenticationService {
 
-    public static boolean Validate(String user, String pass){
+    public boolean validate(String user, String pass){
         try {
             if(user == null || pass == null)
                 return false;
-            BufferedReader br = new BufferedReader(new FileReader(Strings.Credentials));
+            BufferedReader br = new BufferedReader(new FileReader(Strings.CredentialsFilePath));
             for(String line; (line = br.readLine()) != null; ){
                 String[] credentials = line.split(";");
                 String userName = credentials[0].trim();

@@ -5,7 +5,8 @@ package util;
  */
 public class Strings {
     public static String ServerURL = "rmi://localhost/printserver";
-    public static String Credentials = "src/util/Credentials.txt";
+    public static String CredentialsFilePath = "src/util/Credentials.txt";
+    public static String RoleFilePath = "src/util/Roles.txt";
     public static String LogFileLocation = "src/serverlog.log";
     public static String ConfigNotFoundMsg = "Configuration %s not found.";
     public static String ConfigSetOk = "Configuration has been set.";

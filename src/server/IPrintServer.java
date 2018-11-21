@@ -1,5 +1,7 @@
 package server;
 
+import util.Role;
+
 import java.util.List;
 import java.rmi.RemoteException;
 
@@ -13,5 +15,5 @@ public interface IPrintServer extends java.rmi.Remote {
     String status(String username, String password) throws RemoteException;  // prints status of printer on the user's display
     String readConfig(String parameter, String username, String password) throws RemoteException;   // prints the value of the parameter on the user's display
     String setConfig(String parameter, String value, String username, String password) throws RemoteException;   // sets the parameter to value
-    boolean authenticate(String username, String password) throws RemoteException;
+    Role authenticate(String username, String password) throws RemoteException;
 }
