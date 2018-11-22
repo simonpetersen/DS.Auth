@@ -27,7 +27,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public String print(String filename, String printer, String username, String password) {
-        if (!authenticationService.validate(username, password)) {
+        if (!authenticationService.validate(username, password) || !checkRole(username, "Print")) {
             return Strings.UserNotAuthorized;
         }
         logger.info("User: " + username + " called addPrintJob with following inputs. Filename: " + filename + " and printer: " + printer);
@@ -36,7 +36,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public List<String> queue(String username, String password) {
-        if (!authenticationService.validate(username, password)) {
+        if (!authenticationService.validate(username, password) || !checkRole(username, "Queue")) {
             List<String> result = new ArrayList<>();
             result.add(Strings.UserNotAuthorized);
             return result;
@@ -47,7 +47,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public String topQueue(int job, String username, String password) {
-        if (!authenticationService.validate(username, password)) {
+        if (!authenticationService.validate(username, password) || !checkRole(username, "TopQueue")) {
             return Strings.UserNotAuthorized;
         }
         logger.info("User: " + username + " moved job: " + job + " to top of queue.");
@@ -56,7 +56,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public String start(String username, String password) {
-        if (!authenticationService.validate(username, password)) {
+        if (!authenticationService.validate(username, password) || !checkRole(username, "Start")) {
             return Strings.UserNotAuthorized;
         }
         logger.info("User: " + username + " started the printservice.");
@@ -65,7 +65,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public String stop(String username, String password) {
-        if (!authenticationService.validate(username, password)) {
+        if (!authenticationService.validate(username, password) || !checkRole(username, "Stop")) {
             return Strings.UserNotAuthorized;
         }
         logger.info("User: " + username + " stopped the printservice.");
@@ -74,7 +74,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public String restart(String username, String password) {
-        if (!authenticationService.validate(username, password)) {
+        if (!authenticationService.validate(username, password) || !checkRole(username, "Restart")) {
             return Strings.UserNotAuthorized;
         }
         logger.info("User: " + username + " restarted the printservice.");
@@ -83,7 +83,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public String status(String username, String password) {
-        if (!authenticationService.validate(username, password)) {
+        if (!authenticationService.validate(username, password) || !checkRole(username, "Status")) {
             return Strings.UserNotAuthorized;
         }
         logger.info("User: " + username + " viewed the status of the printservice.");
@@ -92,7 +92,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public String readConfig(String parameter, String username, String password) {
-        if (!authenticationService.validate(username, password)) {
+        if (!authenticationService.validate(username, password) || !checkRole(username, "Read config")) {
             return Strings.UserNotAuthorized;
         }
         logger.info("User: " + username + " read the config with parameter: " + parameter);
@@ -101,7 +101,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
 
     @Override
     public String setConfig(String parameter, String value, String username, String password) {
-        if (!authenticationService.validate(username, password)) {
+        if (!authenticationService.validate(username, password) || !checkRole(username, "Write config")) {
             return Strings.UserNotAuthorized;
         }
         logger.info("User: " + username + " set the config with parameter: " + parameter + " to value: " + value);
@@ -116,5 +116,33 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
         }
         logger.info("User: " + username + " has successfully been authenticated.");
         return accessRoleService.getRoleFromPassword(username);
+    }
+
+    @Override
+    public boolean checkRole(String username, String job){
+        Role role = accessRoleService.getRoleFromPassword(username);
+        if (role == Role.Unknown)
+                return false;
+        switch(job){
+            case "Print":
+                return role != Role.Technician;
+            case "Queue":
+                return role != Role.Technician;
+            case "Status":
+                return role == Role.Admin || role == Role.Technician;
+            case "TopQueue":
+                return role == Role.Admin || role == Role.PowerUser;
+            case "Start":
+                return role == Role.Admin || role == Role.Technician;
+            case "Stop":
+                return role == Role.Admin || role == Role.Technician;
+            case "Restart":
+                return role != Role.Employee;
+            case "Read config":
+                return role == Role.Admin || role == Role.Technician;
+            case "Write config":
+                return role == Role.Admin || role == Role.Technician;
+        }
+        return false;
     }
 }
