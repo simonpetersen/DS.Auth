@@ -115,12 +115,11 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
             return Role.Unknown;
         }
         logger.info("User: " + username + " has successfully been authenticated.");
-        return accessRoleService.getRoleFromPassword(username);
+        return accessRoleService.getRoleFromUsername(username);
     }
 
-    @Override
-    public boolean checkRole(String username, String job){
-        Role role = accessRoleService.getRoleFromPassword(username);
+    private boolean checkRole(String username, String job){
+        Role role = accessRoleService.getRoleFromUsername(username);
         if (role == Role.Unknown)
                 return false;
         switch(job){

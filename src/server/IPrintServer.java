@@ -16,5 +16,5 @@ public interface IPrintServer extends java.rmi.Remote {
     String readConfig(String parameter, String username, String password) throws RemoteException;   // prints the value of the parameter on the user's display
     String setConfig(String parameter, String value, String username, String password) throws RemoteException;   // sets the parameter to value
     Role authenticate(String username, String password) throws RemoteException;
-    boolean checkRole (String username, String job);
+    //boolean checkRole (String username, String job);
 }

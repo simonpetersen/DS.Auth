@@ -11,7 +11,7 @@ import java.io.FileReader;
  */
 public class AccessRoleService {
 
-    public Role getRoleFromPassword(String username) {
+    public Role getRoleFromUsername(String username) {
         try {
             if(username == null) return Role.Unknown;
             // Read file with roles, to find username.
