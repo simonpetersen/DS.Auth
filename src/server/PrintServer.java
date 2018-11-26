@@ -4,7 +4,6 @@ import util.Role;
 import util.Strings;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ public class PrintServer extends UnicastRemoteObject implements IPrintServer {
     private AccessRoleService accessRoleService;
     Logger logger;
 
-    public PrintServer(Logger log) throws RemoteException, IOException {
+    public PrintServer(Logger log) throws IOException {
         super();
         this.logger = log;
         printService = new PrintService(logger);
