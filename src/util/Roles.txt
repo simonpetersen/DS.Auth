@@ -1,4 +1,6 @@
-admin;4
-rasmus;3
-simon;2
-ilMaestro;1
+alice;4
+bob;3
+cecilia;2
+david;1
+erica;1
+fred;1
